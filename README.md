@@ -14,3 +14,4 @@ React
 Material UI = ตกแต่งหน้าเวป เลือกใช้ component
 > https://material-ui.com/
 
+**Please Check your MySQL Password Before nodemon index.js**
