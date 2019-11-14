@@ -8,10 +8,12 @@ After pull from git:
     npm i
 
 To Start Frontend:
+    
     cd frontend
     npm start
  
  To Start Backend:
+    
     cd backend
     node server.js
 
