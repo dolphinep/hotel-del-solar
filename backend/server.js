@@ -5,7 +5,7 @@ const mysql = require('mysql');
 
 const app = express();
 
-const SELECT_ALL_PRODUCTS_QUERY = 'SELECT * FROM test';
+//const SELECT_ALL_PRODUCTS_QUERY = 'SELECT * FROM test';
 
 const connection = mysql.createConnection({
     host: 'localhost',
