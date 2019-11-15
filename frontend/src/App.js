@@ -7,8 +7,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import Home from './pages/Home';
-import Register from './pages/Register';
+import Client from './pages/Client';
 import Admin from './pages/Admin';
 
 export default function App() {
@@ -17,30 +16,21 @@ export default function App() {
       <div>
         <Nav/>
         <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/register">Registeration</Link>
-            </li>
-            <li>
-              <Link to="/admin">Admin</Link>
-            </li>
+          <ul align="center">
+            <Link to="/">Client</Link>
+            &emsp;&emsp;            
+            <Link to="/admin">Admin</Link>              
           </ul>
         </nav>
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/register">
-            <Register />
-          </Route>
+        <Switch>          
           <Route path="/admin">
             <Admin />
-          </Route>
+          </Route>          
           <Route path="/">
-            <Home />
+            <Client />
           </Route>
         </Switch>
       </div>
