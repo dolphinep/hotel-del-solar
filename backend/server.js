@@ -14,6 +14,7 @@ const connection = mysql.createConnection({
     database: 'hotel' //////////////FILLHERE
 });
 
+
 connection.connect(err => {
     if (err) {
         console.log(err);
@@ -40,6 +41,21 @@ app.get('/addhousekeeping', (req, res)=>{
     })
     console.log(INSERT_HOUSEKEEPING);
     
+})
+
+app.get('/availableroomcalendar',(req, res)=> {
+    const {typeid, checkin, checkout} = req.query;
+    const SELECT_AMOUNT_IN_DAY = `SELECT AMOUNTAVAILABLE FROM availableroomcalendar WHERE SELECT_DATE >= '${checkin}' AND SELECT_DATE <= '${checkout}' AND TYPE_ID = ${typeid}`;
+    connection.query(SELECT_AMOUNT_IN_DAY, (err, results) => {
+        if(err){
+            return res.send(err)
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    })
 })
 
 app.get('/', (req,res) => {
