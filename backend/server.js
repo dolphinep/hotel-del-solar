@@ -1,17 +1,16 @@
-
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql');
-
+const config = require('./config.json');
 const app = express();
-
+console.log(config);
 //const SELECT_ALL_PRODUCTS_QUERY = 'SELECT * FROM test';
 
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '1480', //////////////FILLHERE
-    database: 'hotel' //////////////FILLHERE
+    password: config.passwordDB, //////////////FILLHERE
+    database: config.nameDB //////////////FILLHERE
 });
 
 connection.connect(err => {
