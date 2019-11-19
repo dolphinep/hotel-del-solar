@@ -1,6 +1,4 @@
-import React, { Component } from "react";
-import { Switch, Route, Link, Redirect } from 'react-router-dom';
-import { Table } from "@material-ui/core";
+import React from "react";
 import ColorButton from '@material-ui/core/Button';
 
 
@@ -33,7 +31,7 @@ class Login extends React.Component {
             password: ''
         })
 
-        if (await form.password == validate.password) {
+        if (await form.password === validate.password) {
             //alert("success")
             this.props.parentLogin(true);
         } else {

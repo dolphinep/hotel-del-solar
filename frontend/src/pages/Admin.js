@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Switch, Route, Link, Router, withRouter, Redirect } from 'react-router-dom';
+import React from "react";
+import { Switch, Route, Link, withRouter, Redirect } from 'react-router-dom';
 import Table from './components/Table';
 import Login from './Login';
 import Container from '@material-ui/core/Container';
@@ -26,7 +26,7 @@ class Admin extends React.Component {
 
 
     render() {
-        let { path, url } = this.props.match;
+        let { url } = this.props.match;
         return (
             <div>
                 <Link to={`${url}/add`}>Table</Link>
