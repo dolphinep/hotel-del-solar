@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Switch, Route, Link, Redirect } from 'react-router-dom';
 import { Table } from "@material-ui/core";
+import ColorButton from '@material-ui/core/Button';
+
 
 const validate = { id: "p", password: '1234' };
 
@@ -32,7 +34,7 @@ class Login extends React.Component {
         })
 
         if (await form.password == validate.password) {
-            alert("success")
+            //alert("success")
             this.props.parentLogin(true);
         } else {
             alert("Fail")
@@ -42,19 +44,24 @@ class Login extends React.Component {
 
     render() {
         return (
-            <div>
+            <div align='center'>
                 <form>
+                <br></br>  <br></br> <br></br>  <br></br> <br></br>  <br></br> <br></br>  <br></br>
                     <label>
-                        <h1>Password:</h1>
+                        <h1 style={{ color: '#3f51b5' , fontSize: 40}}>Please Enter Password</h1>
                         <input
+                            style={{width:420, height: 40,fontSize: 20,textAlign: 'center'}}
+                            placeholder="Type password here"
                             name='password'
                             value={this.state.password}
                             onChange={e => this.handleChange(e)} />
+                        
                     </label>
-
-                    <button onClick={(e) => this.onSubmit(e)}>
+                    <br></br>  <br></br>
+                    <ColorButton variant="contained" style={{ width: 80, backgroundColor: '#4BA7E3', color: '#ffffff' }}
+                    onClick={(e) => this.onSubmit(e)}>
                         SUBMIT
-                    </button>
+                    </ColorButton >
                 </form>
             </div>
         );
