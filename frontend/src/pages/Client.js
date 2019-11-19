@@ -15,7 +15,13 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    withRouter
+  } from "react-router-dom";
 
 class Client extends Component {
 
@@ -247,10 +253,11 @@ class Client extends Component {
                         <MenuItem value={10}>10</MenuItem>
                     </Select>
                 </FormControl><br></br>  <br></br>
-                <ColorButton variant="contained" style={{ backgroundColor: '#4BA7E3', color: '#ffffff' }}
-                    onClick={this.nextPage}>
-                    Next
-                </ColorButton >
+                <Link to='/register'>
+                    <ColorButton variant="contained" style={{ backgroundColor: '#4BA7E3', color: '#ffffff' }}>
+                        Next
+                    </ColorButton >
+                </Link>
                 </div><br></br>  <br></br>  <br></br>  <br></br>  
             </div>
         )

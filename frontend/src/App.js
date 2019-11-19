@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import Client from './pages/Client';
 import Admin from './pages/Admin';
+import Register from './pages/Register';
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
             renders the first one that matches the current URL. */}
         <Switch>
           <Route path="/admin" component={Admin}/>
+          <Route path="/register" component={Register}/>
           <Route exact path="/" component={withRouter(Client)}/>
         </Switch>
       </div>
