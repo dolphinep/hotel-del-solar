@@ -4,7 +4,7 @@ import { Switch, Route, Link, withRouter, Redirect } from 'react-router-dom';
 import Table from './components/Table';
 import Login from './Login';
 import Container from '@material-ui/core/Container';
-import Roomreservation from "./Roomreservation";
+import Roomreservation from "./roomreservation";
 
 class Admin extends React.Component {
     constructor(props) {

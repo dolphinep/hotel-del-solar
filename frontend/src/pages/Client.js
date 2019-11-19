@@ -79,8 +79,8 @@ class Client extends Component {
                 var t = JSON.parse(jsonStr);
                 var i;
                 var min = 999;
-                if (t.data.length !== 0) {
-                    for (i = 0; i < t.data.length; i++) {
+                if (t.data.length-1 !== 0) {
+                    for (i = 0; i < t.data.length-1; i++) {
                         if (t.data[i].AMOUNTAVAILABLE < min)
                             min = t.data[i].AMOUNTAVAILABLE;
                     }
@@ -103,17 +103,37 @@ class Client extends Component {
 
 
     handleCheckInDateChange = date => {
-        const newdate = this.formatDate(date);
-        this.setState({
-            selectedCheckInDate: newdate
-        });
+        var d = new Date('Fri Nov 01 2019');
+        var d2 = new Date('Mon Dec 1 2019');
+        if (date < d) {
+            alert("Sorry this day has passed.");
+        }
+        else if (date > d2) {
+            alert("Sorry this day is out of provide.");
+        }
+        else {
+            const newdate = this.formatDate(date);
+            this.setState({
+                selectedCheckInDate: newdate
+            })
+        };
     }
 
     handleCheckOutDateChange = date => {
         const newdate = this.formatDate(date);
-        this.setState({
-            selectedCheckOutDate: newdate
-        });
+        var d2 = new Date('Mon Dec 1 2019');
+        console.log(date)
+        if (newdate < this.state.selectedCheckInDate) {
+            alert("Sorry you can not select this day.");
+        }
+        else if (date > d2) {
+            alert("Sorry this day is out of provide.");
+        }
+        else {
+            this.setState({
+                selectedCheckOutDate: newdate
+            });
+        }
     }
 
     handleChangeAmount = event => {
