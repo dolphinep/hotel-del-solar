@@ -148,6 +148,78 @@ app.get('/housekeeping', (req, res) => {
     })
 })
 
+// Roomreservation
+app.get('/roomreservation', (req, res)=>{
+    const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE STATUS="wait"`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    })
+    
+})
+
+app.get('/roomreservationdelete', (req, res)=>{
+    const {cusid} = req.query;
+    const SELECTROOMRESERVATION = `DELETE FROM roomreserved WHERE CUSTOMER_ID='${cusid}'`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    })
+    
+})
+
+app.get('/roomreservationpayed', (req, res)=>{
+    const {cusid} = req.query;
+    const SELECTROOMRESERVATION = `UPDATE roomreserved SET STATUS = 'payed' WHERE CUSTOMER_ID='${cusid}'`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    })
+    
+})
+
+app.get('/createpayment', (req, res)=>{
+    const {cusid} = req.query;
+    const SELECTROOMRESERVATION = `INSERT INTO payment WHERE CUSTOMER_ID='${cusid}'`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    })
+    
+})
+
 app.listen(4000, () => {
     console.log('Products server listening on port 4000');
 
