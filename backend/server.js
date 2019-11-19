@@ -10,8 +10,8 @@ console.log(config);
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Muknairun2', //////////////FILLHERE
-    database: 'hotel_del_solar' //////////////FILLHERE
+    password: 'redflower', //////////////FILLHERE
+    database: 'hoteldelsolar' //////////////FILLHERE
 });
 
 
