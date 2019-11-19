@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import Client from './pages/Client';
 import Admin from './pages/Admin';
-import Register from './pages/Register';
+import Register from './pages/register';
 
 export default function App() {
   return (

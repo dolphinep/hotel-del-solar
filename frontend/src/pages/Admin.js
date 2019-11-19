@@ -29,16 +29,17 @@ class Admin extends React.Component {
         let { url } = this.props.match;
         return (
             <div>
-                <Link to={`${url}/add`}>Table</Link>
-                {
-                    this.state.pass ? <Redirect to="/admin/add" /> : <Redirect to="/admin" />
-                }
+                
                 <Switch>
                     <Route exact path={"/admin"}>
                         <Login parentLogin={this.isLogin} />
                     </Route>
                     <Route path={`/admin/:topicId`}>
                         <Container>
+                        <Link to={`${url}/add`}>Table</Link>
+                            {
+                                 this.state.pass ? <Redirect to="/admin/add" /> : <Redirect to="/admin" />
+                            }
                             <Table />
                         </Container>
                     </Route>
