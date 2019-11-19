@@ -10,8 +10,8 @@ console.log(config);
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'minus51973', //////////////FILLHERE
-    database: 'hoteldelsolar', //////////////FILLHERE
+    password: 'Muknairun2', //////////////FILLHERE
+    database: 'hotel_del_solar', //////////////FILLHERE
 });
 
 
@@ -138,6 +138,39 @@ app.get('/customer2', (req, res) => {
         res.end(JSON.stringify(results));
     })
 })
+
+app.post('/addcustomer',(req,res)=>{
+    const {citizenID,customer_id}=req.body;
+    const toAdd=`INSERT INTO customer(CITIZEN_ID,CUSTOMER_ID)
+    VALUES('${citizenID}',${customer_id})`;
+
+    connection.query(toAdd, (err,results) => {
+        if (err) {
+            return res.status("Error", err);
+        }
+        else {
+            console.log(results)
+            res.json(results);
+        }
+    })
+})
+
+//Nai add room_reserved
+app.post('/roomreserved',(req,res)=>{
+    const {reserved_id,checkin_date,checkout_date,customer_id,stay_night}=req.bofy;
+    const toAdd=`INSERT INTO room(RESERVED_ID, CHECKIN_DATE, CHECKOUT_DATE, CUSTOMER_ID,STAY_NIGHT) 
+    VALUES(${reserved_id}, '${checkin_date}', '${checkout_date}', ${customer_id},${stay_night})`;
+    connection.query(toAdd, (err,results) => {
+        if (err) {
+            return res.status("Error", err);
+        }
+        else {
+            console.log(results)
+            res.json(results);
+        }
+    })
+})
+
 //PING get all housekeeping
 app.get('/housekeeping', (req, res) => {
     const cus = `SELECT * FROM housekeeping`
