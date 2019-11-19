@@ -21,7 +21,7 @@ import {
     Route,
     Link,
     withRouter
-  } from "react-router-dom";
+} from "react-router-dom";
 
 class Client extends Component {
 
@@ -62,7 +62,14 @@ class Client extends Component {
         console.log(this.state.availableroom)
         console.log(this.state.amount)
         if (this.state.availableroom < this.state.amount) alert("Sorry rooms are not enough for you T^T ");
-        else if (this.state.availableroom >= this.state.amount) alert("Next page")
+        else if (this.state.availableroom >= this.state.amount) {
+            const that = this;
+            const { selectedCheckInDate, selectedCheckOutDate, selectedValue, amount } = this.state;
+            fetch(`http://localhost:4000/upavailableroom?checkin=${selectedCheckInDate}&checkout=${selectedCheckOutDate}
+            &typeid=${selectedValue}&amount=${amount}`)
+            alert("Save to database");
+            window.location.href = '/register';
+        }
         else alert("Please fill in your conditions")
     }
 
@@ -79,8 +86,8 @@ class Client extends Component {
                 var t = JSON.parse(jsonStr);
                 var i;
                 var min = 999;
-                if (t.data.length-1 !== 0) {
-                    for (i = 0; i < t.data.length-1; i++) {
+                if (t.data.length - 1 !== 0) {
+                    for (i = 0; i < t.data.length - 1; i++) {
                         if (t.data[i].AMOUNTAVAILABLE < min)
                             min = t.data[i].AMOUNTAVAILABLE;
                     }
@@ -90,7 +97,7 @@ class Client extends Component {
                 }
                 else {
                     that.setState({ availableroom: 'NULL' });
-                }                
+                }
             })
             .catch(err => console.error(err))
     }
@@ -245,40 +252,44 @@ class Client extends Component {
                     Search
                 </ColorButton >
                 &nbsp;&nbsp;Available of  {this.Type_IDToRoomName(this.state.selectedValue)} Room = {this.state.availableroom}
-                <div><br></br>     
-                <h3 style={{ color: '#1C265F' }}>
-                    Step 3 : How many room do you want to reserve.
-                </h3>              
-                <FormControl>
-                    <InputLabel id="demo-customized-select-label">Amount</InputLabel>
-                    <Select
-                        labelId="demo-customized-select-label"
-                        id="demo-customized-select"
-                        value={this.state.amount}
-                        onChange={this.handleChangeAmount}
-                    //input={<BootstrapInput />}
-                    >
-                        <MenuItem value='0'>
-                            <em>0</em>
-                        </MenuItem>
-                        <MenuItem value={1}>1</MenuItem>
-                        <MenuItem value={2}>2</MenuItem>
-                        <MenuItem value={3}>3</MenuItem>
-                        <MenuItem value={4}>4</MenuItem>
-                        <MenuItem value={5}>5</MenuItem>
-                        <MenuItem value={6}>6</MenuItem>
-                        <MenuItem value={7}>7</MenuItem>
-                        <MenuItem value={8}>8</MenuItem>
-                        <MenuItem value={9}>9</MenuItem>
-                        <MenuItem value={10}>10</MenuItem>
-                    </Select>
-                </FormControl><br></br>  <br></br>
-                <Link to='/register'>
-                    <ColorButton variant="contained" style={{ backgroundColor: '#4BA7E3', color: '#ffffff' }}>
+                <div><br></br>
+                    <h3 style={{ color: '#1C265F' }}>
+                        Step 3 : How many room do you want to reserve.
+                </h3>
+                    <FormControl>
+                        <InputLabel id="demo-customized-select-label">Amount</InputLabel>
+                        <Select
+                            labelId="demo-customized-select-label"
+                            id="demo-customized-select"
+                            value={this.state.amount}
+                            onChange={this.handleChangeAmount}
+                        //input={<BootstrapInput />}
+                        >
+                            <MenuItem value='0'>
+                                <em>0</em>
+                            </MenuItem>
+                            <MenuItem value={1}>1</MenuItem>
+                            <MenuItem value={2}>2</MenuItem>
+                            <MenuItem value={3}>3</MenuItem>
+                            <MenuItem value={4}>4</MenuItem>
+                            <MenuItem value={5}>5</MenuItem>
+                            <MenuItem value={6}>6</MenuItem>
+                            <MenuItem value={7}>7</MenuItem>
+                            <MenuItem value={8}>8</MenuItem>
+                            <MenuItem value={9}>9</MenuItem>
+                            <MenuItem value={10}>10</MenuItem>
+                        </Select>
+                    </FormControl><br></br>  <br></br>
+                    <Link to='/register'>
+                        <ColorButton variant="contained" style={{ backgroundColor: '#4BA7E3', color: '#ffffff' }}>
+                            Next
+                    </ColorButton >
+                    </Link>
+                    <ColorButton variant="contained" style={{ backgroundColor: '#4BA7E3', color: '#ffffff' }}
+                        onClick={this.nextPage}>
                         Next
                     </ColorButton >
-                </Link>
-                </div><br></br>  <br></br>  <br></br>  <br></br>  
+                </div><br></br>  <br></br>  <br></br>  <br></br>
             </div>
         )
     }
