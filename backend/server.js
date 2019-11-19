@@ -104,3 +104,21 @@ app.get('/roomreservationpayed', (req, res)=>{
     })
     
 })
+
+app.get('/createpayment', (req, res)=>{
+    const {cusid} = req.query;
+    const SELECTROOMRESERVATION = `INSERT INTO payment WHERE CUSTOMER_ID='${cusid}'`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    })
+    
+})
