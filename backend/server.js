@@ -10,8 +10,8 @@ console.log(config);
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: config.passwordDB, //////////////FILLHERE
-    database: config.nameDB //////////////FILLHERE
+    password: 'Muknairun2', //////////////FILLHERE
+    database: 'hotel_del_solar' //////////////FILLHERE
 });
 
 
@@ -27,8 +27,26 @@ connection.connect(err => {
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('/addhousekeeping', (req, res) => {
-    const { housekeeping_id, age, first_name, last_name, tel } = req.query;
+/*ของกุไอสัส*/ 
+app.get('/addcustomer', (req, res)=>{
+    const {citizen_id,  fname, lname,gender,bdate,email, tel} = req.query;
+    const INSERT_CUSTOMER2 = `INSERT INTO customer2(CITIZEN_ID, FNAME, LNAME,GENDER,BDATE,EMAIL, TEL) 
+    VALUES('${citizen_id}','${fname}', '${lname}','${gender}','${bdate}','${email}', '${tel}')`;
+
+    connection.query(INSERT_CUSTOMER2, (err,results)=>{
+        if(err){
+            return res.send(err);
+        }
+        else{
+            return res.send('success add');
+        }
+    })
+    console.log(INSERT_CUSTOMER2);
+    
+})
+
+app.get('/addhousekeeping', (req, res)=>{
+    const {housekeeping_id, age, first_name, last_name, tel} = req.query;
     const INSERT_HOUSEKEEPING = `INSERT INTO housekeeping(HOUSEKEEPING_ID, AGE, FIRST_NAME, LAST_NAME, TEL) 
     VALUES(${housekeeping_id}, ${age}, '${first_name}', '${last_name}', '${tel}')`;
 
