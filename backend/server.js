@@ -10,8 +10,8 @@ const app = express();
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '1480', //////////////FILLHERE
-    database: 'hotel' //////////////FILLHERE
+    password: 'minus51973', //////////////FILLHERE
+    database: 'hoteldelsolar', //////////////FILLHERE
 });
 
 connection.connect(err => {
@@ -49,4 +49,58 @@ app.get('/', (req,res) => {
 app.listen(4000, () => {
     console.log('Products server listening on port 4000');
 
+})
+
+// Roomreservation
+app.get('/roomreservation', (req, res)=>{
+    const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE STATUS="wait"`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    })
+    
+})
+
+app.get('/roomreservationdelete', (req, res)=>{
+    const {cusid} = req.query;
+    const SELECTROOMRESERVATION = `DELETE FROM roomreserved WHERE CUSTOMER_ID='${cusid}'`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    })
+    
+})
+
+app.get('/roomreservationpayed', (req, res)=>{
+    const {cusid} = req.query;
+    const SELECTROOMRESERVATION = `UPDATE roomreserved SET STATUS = 'payed' WHERE CUSTOMER_ID='${cusid}'`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    })
+    
 })
