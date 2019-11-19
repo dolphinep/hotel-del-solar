@@ -9,6 +9,7 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            hidden: true,
             password: null,
             pass: false,
         };
@@ -48,7 +49,9 @@ class Login extends React.Component {
                     <label>
                         <h1 style={{ color: '#3f51b5' , fontSize: 40}}>Please Enter Password</h1>
                         <input
+                            type={this.state.hidden ? "password" : "text"}
                             style={{width:420, height: 40,fontSize: 20,textAlign: 'center'}}
+                        
                             placeholder="Type password here"
                             name='password'
                             value={this.state.password}

@@ -1,9 +1,10 @@
+
 import React from "react";
 import { Switch, Route, Link, withRouter, Redirect } from 'react-router-dom';
 import Table from './components/Table';
 import Login from './Login';
 import Container from '@material-ui/core/Container';
-
+import Roomreservation from "./roomreservation";
 
 class Admin extends React.Component {
     constructor(props) {
@@ -27,8 +28,10 @@ class Admin extends React.Component {
 
     render() {
         let { url } = this.props.match;
+        //<Roomreservation />
         return (
             <div>
+
                 <Link to={`${url}/add`}>Table</Link>
                 {
                     this.state.pass ? <Redirect to="/admin/add" /> : <Redirect to="/admin" />
@@ -39,10 +42,11 @@ class Admin extends React.Component {
                     </Route>
                     <Route path={`/admin/:topicId`}>
                         <Container>
-                            <Table />
+                         <Roomreservation />
                         </Container>
                     </Route>
                 </Switch>
+                
             </div>
         );
     }

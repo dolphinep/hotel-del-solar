@@ -1,147 +1,240 @@
-
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
+import React, { Component } from "react";
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import {
+  KeyboardDatePicker, MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+class Register extends Component {
+
+  constructor(props) {
+    super();
+    this.state = {
+      citizen_id: '',
+      fname: '',
+      lname: '',
+      gender: '',
+      bdate: null,
+      email: '',
+      tel: ''
+    }
+  }
+
+  formatDate(date) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+  handleChangeCit = event => {
+    this.setState({
+      citizen_id: event.target.value
+    });
+  }
+
+  handleChangeFname = event => {
+    this.setState({
+      fname: event.target.value
+    });
+  }
+
+  handleChangeLname = event => {
+    this.setState({
+      lname: event.target.value
+    });
+  }
+
+  handleBdateChange = date => {
+    const newdate = this.formatDate(date);
+    this.setState({
+      bdate: newdate
+    });
+  }
+
+  handleChangeGender = event => {
+    this.setState({
+      gender: event.target.value,
+    });
+  }
+
+  handleChangeEmail = event => {
+    this.setState({
+      email: event.target.value
+    });
+  }
+
+  handleChangeTel = event => {
+    this.setState({
+      tel: event.target.value
+    });
+  }
+
+  addCustomer = _ => {
+    console.log(this.state)
+    let data = {
+      citizenID: this.state.citizen_id,
+      fname: this.state.fname,
+      lname: this.state.lname,
+      gender: this.state.gender,
+      bdate: this.state.bdate,
+      email: this.state.email,
+      tel:this.state.tel
+    }
+    fetch('http://localhost:4000/addcustomer2', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+      
+    }).then(response => response.json)
+      .then(response => console.log("Hi"))
+      .catch(err => console.error(err))
+  }
+
+  render() {
+    return (
+      <Container component="main" maxWidth="xs">
+
+        <div align='center' spacing={5}>
+          <h1 style={{ color: '#3f51b5' }}>
+            We'd like to know more about you!
+      </h1><br></br>
+          <h3 style={{ color: '#1C265F' }}>
+            Step 4 : Please fill your information.
+        </h3><br></br>
+          <form>
+            <Grid container spacing={5} >
+              <Grid item xs={12}>
+                <TextField
+                  value={this.state.citizen_id}
+                  onChange={this.handleChangeCit}
+                  name="citizen_id"
+                  required
+                  fullWidth
+                  id="citizen_id"
+                  label="Citizen ID or Passport ID"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={this.state.fname}
+                  onChange={this.handleChangeFname}
+                  name="fname"
+                  required
+                  fullWidth
+                  id="fname"
+                  label="First Name"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={this.state.lname}
+                  onChange={this.handleChangeLname}
+                  required
+                  fullWidth
+                  id="lname"
+                  label="Last Name"
+                  name="lname"
+                />
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                <InputLabel id="gender_label">Gender*</InputLabel>
+                <Select
+                  value={this.state.gender}
+                  onChange={this.handleChangeGender}
+                  required
+                  variant="standard"
+                  label="Gender"
+                  id="gender"
+                  name="gender"
+
+                //input={<BootstrapInput />}
+                >
+                  <MenuItem value={1}>Male</MenuItem>
+                  <MenuItem value={2}>Female</MenuItem>
+                </Select>
+              </Grid>
+              <Grid item xs={12} sm={10}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+
+                  <KeyboardDatePicker
+                    required
+                    disableToolbar
+                    variant="inline"
+                    format="dd/MM/yyyy"
+                    id="bdate"
+                    name="bdate"
+                    label="Birthday"
+                    value={this.state.bdate}
+                    onChange={this.handleBdateChange}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change date',
+                    }}>
+
+                  </KeyboardDatePicker>
+                </MuiPickersUtilsProvider>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  value={this.state.email}
+                  onChange={this.handleChangeEmail}
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  value={this.state.tel}
+                  onChange={this.handleChangeTel}
+                  required
+                  fullWidth
+                  name="tel"
+                  id="tel"
+                  label="Telephone Number"
+                  id="tel" />
+
+              </Grid>
+
+            </Grid>
+
+            <Grid container justify="flex-end">
+
+            </Grid>
+            <br></br>
+            <Button
+              onClick={this.addCustomer}
+              type="submit"
+              size="medium"
+              variant="contained"
+              color="primary">
+              SUBMIT
+        </Button>
+          </form>
+
+        </div>
+
+      </Container>
+    );
+  }
 }
 
-const useStyles = makeStyles(theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
-  },
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+export default Register;
 
-export default function SignUp() {
-  const classes = useStyles();
-
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-          <Grid item xs={12}>
-              <TextField
-                autoComplete="cid"
-                name="citizen_id"
-                variant="outlined"
-                required
-                fullWidth
-                id="citizen_id"
-                label="Citizen ID or Passport ID"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="tel"
-                label="Telephone Number"
-                type="tel"
-                id="tel"
-                
-              />
-            </Grid>
-            
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Submit
-          </Button>
-          <Grid container justify="flex-end">
-            
-          </Grid>
-        </form>
-      </div>
-    </Container>
-  );
-}
 
