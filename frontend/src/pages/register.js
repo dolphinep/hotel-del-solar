@@ -22,8 +22,30 @@ class Register extends Component {
       gender: '',
       bdate: null,
       email: '',
-      tel: ''
+      tel: '',
+      typeid: null,
+      selectedCheckInDate: null,
+      selectedCheckOutDate: null,
+      amount: 0,
     }
+  }
+
+  componentDidMount() {
+
+    this.state.selectedCheckInDate = this.getUrlVars()["checkin"];
+    this.state.selectedCheckOutDate = this.getUrlVars()["checkout"];
+    this.state.typeid = this.getUrlVars()["typeid"];
+    this.state.amount = this.getUrlVars()["amount"];
+    console.log(this.state);
+    console.log("HI");
+  }
+
+  getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+      vars[key] = value;
+    });
+    return vars;
   }
 
   formatDate(date) {
@@ -92,13 +114,13 @@ class Register extends Component {
       gender: this.state.gender,
       bdate: this.state.bdate,
       email: this.state.email,
-      tel:this.state.tel
+      tel: this.state.tel
     }
     fetch('http://localhost:4000/addcustomer2', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
-      
+
     }).then(response => response.json)
       .then(response => console.log("Hi"))
       .catch(err => console.error(err))

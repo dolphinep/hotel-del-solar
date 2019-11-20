@@ -10,8 +10,16 @@ console.log(config);
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
+<<<<<<< HEAD
     password: 'Muknairun2', //////////////FILLHERE
     database: 'hotel_del_solar', //////////////FILLHERE
+||||||| merged common ancestors
+    password: 'Gamerpg46842', //////////////FILLHERE
+    database: 'hotel', //////////////FILLHERE
+=======
+    password: '1480', //////////////FILLHERE
+    database: 'hotel_del_solar', //////////////FILLHERE
+>>>>>>> 03461ed8e8a3f98cd3d00fcb894473c242fb1540
 });
 
 
@@ -166,7 +174,7 @@ app.get('/housekeeping', (req, res) => {
 
 // Roomreservation
 app.get('/roomreservation', (req, res)=>{
-    const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE STATUS="wait"`;
+    const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE RESERVE_STATUS="wait"`;
 
     connection.query(SELECTROOMRESERVATION, (err,results)=>{
         if(err){
@@ -238,7 +246,7 @@ app.get('/createpayment', (req, res)=>{
 
 app.get('/upavailableroom',(req, res)=> {
     const {typeid, checkin, checkout, amount} = req.query;
-    const UPDATE_AMOUNT_IN_DAY = `UPDATE availableroomcalendar SET AMOUNTAVAILABLE=AMOUNTAVAILABLE-'${amount}' WHERE SELECT_DATE >= '${checkin}' AND SELECT_DATE < '${checkout}' AND TYPE_ID = ${typeid}`;
+    const UPDATE_AMOUNT_IN_DAY = `UPDATE available_room_calendar SET AMOUNT_AVAILABLE=AMOUNT_AVAILABLE-'${amount}' WHERE DATE >= '${checkin}' AND DATE < '${checkout}' AND TYPE_ID = ${typeid}`;
     connection.query(UPDATE_AMOUNT_IN_DAY, (err, results) => {
         if(err){
             return res.send(err)
@@ -250,8 +258,21 @@ app.get('/upavailableroom',(req, res)=> {
         }
     })
 })
+const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE STATUS="payed"`;
+
+app.get('/history', (req, res) => {
+    const SELECTHISTORY = `SELECT * FROM roomreserved WHERE RESERVE_STATUS="payed"`;
+
+
+    connection.query(SELECTHISTORY, (err, results) => {
+        if (err) throw error;
+        res.json({data: results});
+    })
+})
+
 
 app.listen(4000, () => {
     console.log('Products server listening on port 4000');
 
 })
+
