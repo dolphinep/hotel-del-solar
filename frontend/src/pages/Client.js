@@ -68,7 +68,7 @@ class Client extends Component {
             fetch(`http://localhost:4000/upavailableroom?checkin=${selectedCheckInDate}&checkout=${selectedCheckOutDate}
             &typeid=${selectedValue}&amount=${amount}`)
             alert("Save to database");
-            window.location.href = '/register';
+            window.location.href = `/register?checkin=${selectedCheckInDate}&checkout=${selectedCheckOutDate}&typeid=${selectedValue}&amount=${amount}`;
         }
         else alert("Please fill in your conditions")
     }
@@ -85,15 +85,15 @@ class Client extends Component {
                 //this.setState({apiInfo: jsonStr});
                 var t = JSON.parse(jsonStr);
                 var i;
-                var min = 999;
+                var min = 11;
                 if (t.data.length - 1 !== 0) {
                     for (i = 0; i < t.data.length - 1; i++) {
-                        if (t.data[i].AMOUNTAVAILABLE < min)
-                            min = t.data[i].AMOUNTAVAILABLE;
+                        if (t.data[i].AMOUNT_AVAILABLE < min)
+                            min = t.data[i].AMOUNT_AVAILABLE;
                     }
                     console.log(min);
                     that.setState({ availableroom: min });
-                    min = 999;
+                    min = 11;
                 }
                 else {
                     that.setState({ availableroom: 'NULL' });
