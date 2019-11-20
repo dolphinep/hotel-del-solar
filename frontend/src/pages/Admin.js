@@ -36,40 +36,44 @@ class Admin extends React.Component {
 
 
     render() {
-        let { url } = this.props.match;
+        let { path,url } = this.props.match;
         //<Roomreservation />
         return (
             <div>
+{/*                 
+                {
+                    this.state.pass ? <Redirect to="/admin/add" /> : <Redirect to="/admin" />
+                } */}
                 <Grid container justify="center" alignItems="center">
                     <Breadcrumbs aria-label="breadcrumb">
-                        <Link to="/admin/add" color="inherit" href="/" onClick={handleClick}>
+                        <Link to={`${url}/add`} color="inherit">
                             Room Reserve
                         </Link>
-                        <Link to="/admin/assign" color="inherit" href="/getting-started/installation/" onClick={handleClick}>
+                        <Link to={`${url}/assign`} color="inherit" >
                             Assign Room
                         </Link>
-                        <Link color="inherit" href="/getting-started/installation/" onClick={handleClick}>
+                        <Link to={`${url}/history`} color="inherit" >
                             Room History
                         </Link>
                     </Breadcrumbs>
                 </Grid>
 
-                {
-                    this.state.pass ? <Redirect to="/admin/add" /> : <Redirect to="/admin" />
-                }
                 <Switch>
-                    <Route exact path={"/admin"}>
+                    <Route exact path={path}>
                         <Login parentLogin={this.isLogin} />
                     </Route>
-                    <Route path={`/admin/add`}>
+                    <Route path={`${path}/add`}>
                         <Container>
                             <Roomreservation />
                         </Container>
                     </Route>
-                    <Route path={'/admin/assign'}>
+                    <Route path={`${path}/assign`}>
                         <Container>
                             <Table />
                         </Container>
+                    </Route>
+                    <Route path={`${path}/history`}>
+                        <h2>porsche</h2>
                     </Route>
                 </Switch>
 
