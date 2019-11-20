@@ -4,7 +4,6 @@ const mysql = require('mysql');
 const config = require('./config.json');
 const app = express();
 const bodyParser = require('body-parser')
-console.log(config);
 //const SELECT_ALL_PRODUCTS_QUERY = 'SELECT * FROM test';
 
 const connection = mysql.createConnection({
@@ -155,10 +154,10 @@ app.post('/addcustomer',(req,res)=>{
     })
 })
 
-//Nai add room_reserved
+//Nai add room_reserved ****นายยย add status ด้วยสำหรับ db ใหม่ *****
 app.post('/roomreserved',(req,res)=>{
-    const {reserved_id,checkin_date,checkout_date,customer_id,stay_night}=req.bofy;
-    const toAdd=`INSERT INTO room(RESERVED_ID, CHECKIN_DATE, CHECKOUT_DATE, CUSTOMER_ID,STAY_NIGHT) 
+    const {reserved_id,checkin_date,checkout_date,customer_id,stay_night}=req.body;
+    const toAdd=`INSERT INTO roomreserved(RESERVED_ID, CHECKIN_DATE, CHECKOUT_DATE, CUSTOMER_ID,STAY_NIGHT) 
     VALUES(${reserved_id}, '${checkin_date}', '${checkout_date}', ${customer_id},${stay_night})`;
     connection.query(toAdd, (err,results) => {
         if (err) {
@@ -195,8 +194,39 @@ app.get('/roomreservation', (req, res)=>{
                 data: results
             })
         }
+    }) 
+})
+
+app.get('/payedroom', (req, res)=>{
+    const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE RESERVE_STATUS="payed"`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    }) 
+})
+//add reserve room in assign room page
+app.post('/payedroom', (req, res) => {
+    console.log(req.body)
+    const {RESERVED_ID,CHECKIN_DATE,CHECKOUT_DATE,CUSTOMER_ID,STAY_NIGHT,RESERVE_STATUS}=req.body;
+    const toAdd=`INSERT INTO roomreserved(RESERVED_ID, CHECKIN_DATE, CHECKOUT_DATE, CUSTOMER_ID, STAY_NIGHT, RESERVE_STATUS) 
+    VALUES(${parseInt(RESERVED_ID)}, '${CHECKIN_DATE}', '${CHECKOUT_DATE}', ${parseInt(CUSTOMER_ID)},${parseInt(STAY_NIGHT)}, '${RESERVE_STATUS}')`;
+    console.log(toAdd)
+    connection.query(toAdd, (err,results) => {
+        if (err) {
+            return res.status("Error", err);
+        }
+        else {
+            console.log(results)
+            res.json(results);
+        }
     })
-    
 })
 
 app.get('/roomreservationdelete', (req, res)=>{
@@ -219,7 +249,7 @@ app.get('/roomreservationdelete', (req, res)=>{
 
 app.get('/roomreservationpayed', (req, res)=>{
     const {cusid} = req.query;
-    const SELECTROOMRESERVATION = `UPDATE roomreserved SET STATUS = 'payed' WHERE CUSTOMER_ID='${cusid}'`;
+    const SELECTROOMRESERVATION = `UPDATE roomreserved SET RESERVE_STATUS = 'payed' WHERE CUSTOMER_ID='${cusid}'`;
 
     connection.query(SELECTROOMRESERVATION, (err,results)=>{
         if(err){
