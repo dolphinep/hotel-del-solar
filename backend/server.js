@@ -10,8 +10,8 @@ console.log(config);
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Muknairun2', //////////////FILLHERE
-    database: 'hotel_del_solar', //////////////FILLHERE
+    password: 'Gamerpg46842', //////////////FILLHERE
+    database: 'hotel', //////////////FILLHERE
 });
 
 
@@ -234,6 +234,21 @@ app.get('/createpayment', (req, res)=>{
         }
     })
     
+})
+
+app.get('/upavailableroom',(req, res)=> {
+    const {typeid, checkin, checkout, amount} = req.query;
+    const UPDATE_AMOUNT_IN_DAY = `UPDATE availableroomcalendar SET AMOUNTAVAILABLE=AMOUNTAVAILABLE-'${amount}' WHERE SELECT_DATE >= '${checkin}' AND SELECT_DATE < '${checkout}' AND TYPE_ID = ${typeid}`;
+    connection.query(UPDATE_AMOUNT_IN_DAY, (err, results) => {
+        if(err){
+            return res.send(err)
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    })
 })
 
 app.listen(4000, () => {
