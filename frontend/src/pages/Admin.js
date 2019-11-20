@@ -4,7 +4,16 @@ import { Switch, Route, Link, withRouter, Redirect } from 'react-router-dom';
 import Table from './components/Table';
 import Login from './Login';
 import Container from '@material-ui/core/Container';
-import Roomreservation from "./Roomreservation";
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Grid from '@material-ui/core/Grid';
+import Roomreservation from "./roomreservation";
+import { Tab } from "@material-ui/core";
+
+
+function handleClick(event) {
+    event.preventDefault();
+    console.info('You clicked a breadcrumb.');
+}
 
 class Admin extends React.Component {
     constructor(props) {
@@ -31,23 +40,39 @@ class Admin extends React.Component {
         //<Roomreservation />
         return (
             <div>
+                <Grid container justify="center" alignItems="center">
+                    <Breadcrumbs aria-label="breadcrumb">
+                        <Link to="/admin/add" color="inherit" href="/" onClick={handleClick}>
+                            Room Reserve
+                        </Link>
+                        <Link to="/admin/assign" color="inherit" href="/getting-started/installation/" onClick={handleClick}>
+                            Assign Room
+                        </Link>
+                        <Link color="inherit" href="/getting-started/installation/" onClick={handleClick}>
+                            Room History
+                        </Link>
+                    </Breadcrumbs>
+                </Grid>
 
-                
+                {
+                    this.state.pass ? <Redirect to="/admin/add" /> : <Redirect to="/admin" />
+                }
                 <Switch>
                     <Route exact path={"/admin"}>
                         <Login parentLogin={this.isLogin} />
                     </Route>
-                    <Route path={`/admin/:topicId`}>
+                    <Route path={`/admin/add`}>
                         <Container>
-                        <Link to={`${url}/add`}>Table</Link>
-                            {
-                                this.state.pass ? <Redirect to="/admin/add" /> : <Redirect to="/admin" />
-                            }
-                                <Roomreservation />
+                            <Roomreservation />
+                        </Container>
+                    </Route>
+                    <Route path={'/admin/assign'}>
+                        <Container>
+                            <Table />
                         </Container>
                     </Route>
                 </Switch>
-                
+
             </div>
         );
     }

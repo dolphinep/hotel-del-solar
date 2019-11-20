@@ -10,8 +10,8 @@ console.log(config);
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Muknairun2', //////////////FILLHERE
-    database: 'hotel_del_solar', //////////////FILLHERE
+    password: 'redflower', //////////////FILLHERE
+    database: 'hotel-del-solar', //////////////FILLHERE
 });
 
 
@@ -183,7 +183,7 @@ app.get('/housekeeping', (req, res) => {
 
 // Roomreservation
 app.get('/roomreservation', (req, res)=>{
-    const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE STATUS="wait"`;
+    const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE RESERVE_STATUS="wait"`;
 
     connection.query(SELECTROOMRESERVATION, (err,results)=>{
         if(err){
