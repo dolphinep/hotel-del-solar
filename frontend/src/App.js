@@ -24,7 +24,6 @@ export default function App() {
             <br></br>
             <Link to="/admin">Admin</Link>
             <br></br>
-            <Link to="/history">RoomHistory</Link>
           </ul>
         </nav>
 
@@ -33,7 +32,6 @@ export default function App() {
         <Switch>
           <Route path="/admin" component={Admin}/>
           <Route path="/register" component={Register}/>
-          <Route path="/history" component={RoomHistory}/>
           <Route exact path="/" component={withRouter(Client)}/>
         </Switch>
       </div>

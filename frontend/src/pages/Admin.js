@@ -1,13 +1,13 @@
 
 import React from "react";
-import { Switch, Route, Link, withRouter, Redirect } from 'react-router-dom';
+import { Switch, Route, Link, withRouter } from 'react-router-dom';
 import Table from './components/Table';
 import Login from './Login';
 import Container from '@material-ui/core/Container';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Grid from '@material-ui/core/Grid';
 import Roomreservation from "./roomreservation";
-import { Tab } from "@material-ui/core";
+import RoomHistory from "./RoomHistory";
 
 
 function handleClick(event) {
@@ -73,7 +73,7 @@ class Admin extends React.Component {
                         </Container>
                     </Route>
                     <Route path={`${path}/history`}>
-                        <h2>porsche</h2>
+                        <RoomHistory/>
                     </Route>
                 </Switch>
 
