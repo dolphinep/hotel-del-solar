@@ -183,7 +183,7 @@ app.get('/housekeeping', (req, res) => {
 
 // Roomreservation
 app.get('/roomreservation', (req, res)=>{
-    const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE STATUS="wait"`;
+    const SELECTROOMRESERVATION = `SELECT * FROM ROOMRESERVED WHERE RESERVE_STATUS="payed"`;
 
     connection.query(SELECTROOMRESERVATION, (err,results)=>{
         if(err){
@@ -267,8 +267,21 @@ app.get('/upavailableroom',(req, res)=> {
         }
     })
 })
+const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE STATUS="payed"`;
+
+app.get('/history', (req, res) => {
+    const SELECTHISTORY = `SELECT * FROM roomreserved WHERE RESERVE_STATUS="payed"`;
+
+
+    connection.query(SELECTHISTORY, (err, results) => {
+        if (err) throw error;
+        res.json({data: results});
+    })
+})
+
 
 app.listen(4000, () => {
     console.log('Products server listening on port 4000');
 
 })
+
