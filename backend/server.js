@@ -9,8 +9,8 @@ const bodyParser = require('body-parser')
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'redflower', //////////////FILLHERE
-    database: 'hotel-del-solar', //////////////FILLHERE
+    password: '1480', //////////////FILLHERE
+    database: 'hotel_del_solar', //////////////FILLHERE
 });
 
 
@@ -63,7 +63,7 @@ app.get('/addhousekeeping', (req, res)=>{
 
 app.get('/availableroomcalendar', (req, res) => {
     const { typeid, checkin, checkout } = req.query;
-    const SELECT_AMOUNT_IN_DAY = `SELECT AMOUNTAVAILABLE FROM availableroomcalendar WHERE SELECT_DATE >= '${checkin}' AND SELECT_DATE <= '${checkout}' AND TYPE_ID = ${typeid}`;
+    const SELECT_AMOUNT_IN_DAY = `SELECT AMOUNT_AVAILABLE FROM available_room_calendar WHERE DATE >= '${checkin}' AND DATE <= '${checkout}' AND TYPE_ID = ${typeid}`;
     connection.query(SELECT_AMOUNT_IN_DAY, (err, results) => {
         if (err) {
             return res.send(err)
@@ -285,7 +285,7 @@ app.get('/createpayment', (req, res)=>{
 
 app.get('/upavailableroom',(req, res)=> {
     const {typeid, checkin, checkout, amount} = req.query;
-    const UPDATE_AMOUNT_IN_DAY = `UPDATE availableroomcalendar SET AMOUNTAVAILABLE=AMOUNTAVAILABLE-'${amount}' WHERE SELECT_DATE >= '${checkin}' AND SELECT_DATE < '${checkout}' AND TYPE_ID = ${typeid}`;
+    const UPDATE_AMOUNT_IN_DAY = `UPDATE available_room_calendar SET AMOUNT_AVAILABLE=AMOUNT_AVAILABLE-'${amount}' WHERE DATE >= '${checkin}' AND DATE < '${checkout}' AND TYPE_ID = ${typeid}`;
     connection.query(UPDATE_AMOUNT_IN_DAY, (err, results) => {
         if(err){
             return res.send(err)
