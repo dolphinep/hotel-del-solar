@@ -10,7 +10,7 @@ console.log(config);
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '1480', //////////////FILLHERE
+    password: 'Gamerpg46842', //////////////FILLHERE
     database: 'hotel', //////////////FILLHERE
 });
 
