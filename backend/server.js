@@ -183,7 +183,7 @@ app.get('/housekeeping', (req, res) => {
 
 // Roomreservation
 app.get('/roomreservation', (req, res)=>{
-    const SELECTROOMRESERVATION = `SELECT * FROM ROOMRESERVED WHERE RESERVE_STATUS="payed"`;
+    const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE RESERVE_STATUS="wait"`;
 
     connection.query(SELECTROOMRESERVATION, (err,results)=>{
         if(err){
