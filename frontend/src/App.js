@@ -11,6 +11,7 @@ import {
 import Client from './pages/Client';
 import Admin from './pages/Admin';
 import Register from './pages/register';
+import RoomHistory from './pages/RoomHistory'
 
 export default function App() {
   return (
@@ -20,7 +21,10 @@ export default function App() {
         <nav>
           <ul align="center">
             <Link to="/">Client</Link>
+            <br></br>
             <Link to="/admin">Admin</Link>
+            <br></br>
+            <Link to="/history">RoomHistory</Link>
           </ul>
         </nav>
 
@@ -29,6 +33,7 @@ export default function App() {
         <Switch>
           <Route path="/admin" component={Admin}/>
           <Route path="/register" component={Register}/>
+          <Route path="/history" component={RoomHistory}/>
           <Route exact path="/" component={withRouter(Client)}/>
         </Switch>
       </div>
