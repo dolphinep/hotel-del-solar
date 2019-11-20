@@ -27,24 +27,6 @@ connection.connect(err => {
 app.use(cors());
 app.use(bodyParser.json());
 
-/*ของกุไอสัส*/ 
-app.get('/addcustomer', (req, res)=>{
-    const {citizen_id,  fname, lname,gender,bdate,email, tel} = req.query;
-    const INSERT_CUSTOMER2 = `INSERT INTO customer2(CITIZEN_ID, FNAME, LNAME,GENDER,BDATE,EMAIL, TEL) 
-    VALUES('${citizen_id}','${fname}', '${lname}','${gender}','${bdate}','${email}', '${tel}')`;
-
-    connection.query(INSERT_CUSTOMER2, (err,results)=>{
-        if(err){
-            return res.send(err);
-        }
-        else{
-            return res.send('success add');
-        }
-    })
-    console.log(INSERT_CUSTOMER2);
-    
-})
-
 app.get('/addhousekeeping', (req, res)=>{
     const {housekeeping_id, age, first_name, last_name, tel} = req.query;
     const INSERT_HOUSEKEEPING = `INSERT INTO housekeeping(HOUSEKEEPING_ID, AGE, FIRST_NAME, LAST_NAME, TEL) 
@@ -139,6 +121,7 @@ app.get('/customer2', (req, res) => {
     })
 })
 
+//Add by Nai
 app.post('/addcustomer',(req,res)=>{
     const {citizenID,customer_id}=req.body;
     const toAdd=`INSERT INTO customer(CITIZEN_ID,CUSTOMER_ID)
