@@ -163,8 +163,8 @@ class Register extends Component {
 
                 //input={<BootstrapInput />}
                 >
-                  <MenuItem value={1}>Male</MenuItem>
-                  <MenuItem value={2}>Female</MenuItem>
+                  <MenuItem value={'Male'}>Male</MenuItem>
+                  <MenuItem value={'Female'}>Female</MenuItem>
                 </Select>
               </Grid>
               <Grid item xs={12} sm={10}>

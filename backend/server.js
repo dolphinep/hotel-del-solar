@@ -10,8 +10,8 @@ console.log(config);
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Gamerpg46842', //////////////FILLHERE
-    database: 'hotel', //////////////FILLHERE
+    password: 'Muknairun2', //////////////FILLHERE
+    database: 'hotel_del_solar', //////////////FILLHERE
 });
 
 
@@ -46,7 +46,7 @@ app.get('/addhousekeeping', (req, res)=>{
 
 app.get('/availableroomcalendar', (req, res) => {
     const { typeid, checkin, checkout } = req.query;
-    const SELECT_AMOUNT_IN_DAY = `SELECT AMOUNTAVAILABLE FROM availableroomcalendar WHERE SELECT_DATE >= '${checkin}' AND SELECT_DATE <= '${checkout}' AND TYPE_ID = ${typeid}`;
+    const SELECT_AMOUNT_IN_DAY = `SELECT AMOUNT_AVAILABLE FROM available_room_calendar WHERE DATE >= '${checkin}' AND DATE <= '${checkout}' AND TYPE_ID = ${typeid}`;
     connection.query(SELECT_AMOUNT_IN_DAY, (err, results) => {
         if (err) {
             return res.send(err)

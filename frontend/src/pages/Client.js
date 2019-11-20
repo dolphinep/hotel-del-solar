@@ -88,8 +88,8 @@ class Client extends Component {
                 var min = 999;
                 if (t.data.length - 1 !== 0) {
                     for (i = 0; i < t.data.length - 1; i++) {
-                        if (t.data[i].AMOUNTAVAILABLE < min)
-                            min = t.data[i].AMOUNTAVAILABLE;
+                        if (t.data[i].AMOUNT_AVAILABLE < min)
+                            min = t.data[i].AMOUNT_AVAILABLE;
                     }
                     console.log(min);
                     that.setState({ availableroom: min });
