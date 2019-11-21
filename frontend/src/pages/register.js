@@ -27,6 +27,7 @@ class Register extends Component {
       selectedCheckInDate: null,
       selectedCheckOutDate: null,
       amount: 0,
+      customer_id: ''
     }
   }
 
@@ -105,7 +106,24 @@ class Register extends Component {
     });
   }
 
-  addCustomer = _ => {
+  addCustomer = async _ => {
+
+    const that=this;
+    await fetch(`http://localhost:4000/customerid`)
+      .then(response=>response.json())
+      .then(function(jsonData){
+        return JSON.stringify(jsonData);
+      })
+      .then(function(jsonStr){
+        var t=JSON.parse(jsonStr);
+        var min=parseInt(t.data[0].CUSTOMER_ID)+1
+        const min2 = min.toString();
+        that.setState({customer_id: min2});
+      })
+      .catch(err=>console.error(err),this.setState({customer_id: '1'}))
+      //console.log(this.state.customer_id)
+  
+
     console.log(this.state)
     let data = {
       citizenID: this.state.citizen_id,
@@ -116,17 +134,32 @@ class Register extends Component {
       email: this.state.email,
       tel: this.state.tel
     }
-    fetch('http://localhost:4000/addcustomer2', {
+    await fetch('http://localhost:4000/addcustomer2', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
 
     }).then(response => response.json)
-      .then(response => console.log("Hi"))
       .catch(err => console.error(err))
+
+    let data2 = {
+      citizenID: this.state.citizen_id,
+      customer_id: this.state.customer_id
+    }
+    console.log("data2",data2)
+    await fetch('http://localhost:4000/addcustomer', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data2)
+    
+    }).then(response => response.json)
+      .then(alert("success"))
+      .catch(err => console.error(err))
+
   }
 
   render() {
+    //console.log("customer id",this.state.customer_id)
     return (
       <Container component="main" maxWidth="xs">
 
@@ -185,8 +218,8 @@ class Register extends Component {
 
                 //input={<BootstrapInput />}
                 >
-                  <MenuItem value={1}>Male</MenuItem>
-                  <MenuItem value={2}>Female</MenuItem>
+                  <MenuItem value={'Male'}>Male</MenuItem>
+                  <MenuItem value={'Female'}>Female</MenuItem>
                 </Select>
               </Grid>
               <Grid item xs={12} sm={10}>
@@ -241,6 +274,7 @@ class Register extends Component {
             </Grid>
             <br></br>
             <Button
+              //onClick={this.getCustomerID}
               onClick={this.addCustomer}
               type="submit"
               size="medium"
@@ -249,7 +283,6 @@ class Register extends Component {
               SUBMIT
         </Button>
           </form>
-
         </div>
 
       </Container>

@@ -4,7 +4,6 @@ const mysql = require('mysql');
 const config = require('./config.json');
 const app = express();
 const bodyParser = require('body-parser')
-console.log(config);
 //const SELECT_ALL_PRODUCTS_QUERY = 'SELECT * FROM test';
 
 const connection = mysql.createConnection({
@@ -26,24 +25,6 @@ connection.connect(err => {
 
 app.use(cors());
 app.use(bodyParser.json());
-
-/*ของกุไอสัส*/ 
-app.get('/addcustomer', (req, res)=>{
-    const {citizen_id,  fname, lname,gender,bdate,email, tel} = req.query;
-    const INSERT_CUSTOMER2 = `INSERT INTO customer2(CITIZEN_ID, FNAME, LNAME,GENDER,BDATE,EMAIL, TEL) 
-    VALUES('${citizen_id}','${fname}', '${lname}','${gender}','${bdate}','${email}', '${tel}')`;
-
-    connection.query(INSERT_CUSTOMER2, (err,results)=>{
-        if(err){
-            return res.send(err);
-        }
-        else{
-            return res.send('success add');
-        }
-    })
-    console.log(INSERT_CUSTOMER2);
-    
-})
 
 app.get('/addhousekeeping', (req, res)=>{
     const {housekeeping_id, age, first_name, last_name, tel} = req.query;
@@ -77,6 +58,21 @@ app.get('/availableroomcalendar', (req, res) => {
     })
 })
 
+//Add by nai
+app.get('/customerid', (req, res) => {
+    const get = `SELECT CUSTOMER_ID FROM customer 
+    where CUSTOMER_ID=(select max(CUSTOMER_ID) from customer)`;
+    connection.query(get, (err, results) => {
+        if (err) {
+            return res.send(err)
+        }
+        else {
+            return res.json({
+                data: results
+            })
+        }
+    })
+})
 
 app.get('/', (req, res) => {
     res.send('go to /add')
@@ -103,7 +99,7 @@ app.post('/addcustomer2', (req, res) => {
     const { citizenID, fname, lname, gender, bdate, email, tel } = req.body;
     const Add = `INSERT INTO customer2(CITIZEN_ID, FNAME, LNAME, GENDER, BDATE, EMAIL, TEL) 
     VALUES(${citizenID}, '${fname}', '${lname}', '${gender}', '${bdate}', '${email}', '${tel}')`;
-
+    
     connection.query(Add, (err, results) => {
         if (err) {
             return res.status("Error", err);
@@ -139,10 +135,11 @@ app.get('/customer2', (req, res) => {
     })
 })
 
+//Add by Nai
 app.post('/addcustomer',(req,res)=>{
     const {citizenID,customer_id}=req.body;
     const toAdd=`INSERT INTO customer(CITIZEN_ID,CUSTOMER_ID)
-    VALUES('${citizenID}',${customer_id})`;
+    VALUES('${citizenID}','${customer_id}')`;
 
     connection.query(toAdd, (err,results) => {
         if (err) {
@@ -155,11 +152,13 @@ app.post('/addcustomer',(req,res)=>{
     })
 })
 
-//Nai add room_reserved
+//Nai add room_reserved ****นายยย add status ด้วยสำหรับ db ใหม่ *****
 app.post('/roomreserved',(req,res)=>{
-    const {reserved_id,checkin_date,checkout_date,customer_id,stay_night}=req.bofy;
-    const toAdd=`INSERT INTO room(RESERVED_ID, CHECKIN_DATE, CHECKOUT_DATE, CUSTOMER_ID,STAY_NIGHT) 
-    VALUES(${reserved_id}, '${checkin_date}', '${checkout_date}', ${customer_id},${stay_night})`;
+    
+    const {reserved_id,checkin_date,checkout_date,customer_id,stay_night,reserve_status}=req.body;
+    const toAdd=`INSERT INTO roomreserved(RESERVED_ID, CHECKIN_DATE, CHECKOUT_DATE, CUSTOMER_ID,STAY_NIGHT,RESERVE_STATUS) 
+    VALUES(${reserved_id}, '${checkin_date}', '${checkout_date}', ${customer_id},${stay_night},'${reserve_status}')`;
+   
     connection.query(toAdd, (err,results) => {
         if (err) {
             return res.status("Error", err);
@@ -168,6 +167,16 @@ app.post('/roomreserved',(req,res)=>{
             console.log(results)
             res.json(results);
         }
+    })
+})
+
+//Nai add get customer
+app.get('/customer', (req, res) => {
+    const cus = `SELECT * FROM customer`
+
+    connection.query(cus, (err, results) => {
+        if (err) throw error;
+        res.end(JSON.stringify(results));
     })
 })
 
@@ -195,8 +204,39 @@ app.get('/roomreservation', (req, res)=>{
                 data: results
             })
         }
+    }) 
+})
+
+app.get('/payedroom', (req, res)=>{
+    const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE RESERVE_STATUS="payed"`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    }) 
+})
+//add reserve room in assign room page
+app.post('/payedroom', (req, res) => {
+    console.log(req.body)
+    const {RESERVED_ID,CHECKIN_DATE,CHECKOUT_DATE,CUSTOMER_ID,STAY_NIGHT,RESERVE_STATUS}=req.body;
+    const toAdd=`INSERT INTO roomreserved(RESERVED_ID, CHECKIN_DATE, CHECKOUT_DATE, CUSTOMER_ID, STAY_NIGHT, RESERVE_STATUS) 
+    VALUES(${parseInt(RESERVED_ID)}, '${CHECKIN_DATE}', '${CHECKOUT_DATE}', ${parseInt(CUSTOMER_ID)},${parseInt(STAY_NIGHT)}, '${RESERVE_STATUS}')`;
+    console.log(toAdd)
+    connection.query(toAdd, (err,results) => {
+        if (err) {
+            return res.status("Error", err);
+        }
+        else {
+            console.log(results)
+            res.json(results);
+        }
     })
-    
 })
 
 app.get('/roomreservationdelete', (req, res)=>{
@@ -307,12 +347,19 @@ app.get('/upavailableroom',(req, res)=> {
 const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE STATUS="payed"`;
 
 app.get('/history', (req, res) => {
-    const SELECTHISTORY = `SELECT * FROM roomreserved WHERE RESERVE_STATUS="payed"`;
+    const SELECTHISTORY = `SELECT * FROM ROOM_HISTORY`;
 
 
     connection.query(SELECTHISTORY, (err, results) => {
-        if (err) throw error;
-        res.json({data: results});
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
     })
 })
 

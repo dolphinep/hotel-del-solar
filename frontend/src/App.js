@@ -10,8 +10,7 @@ import {
 } from "react-router-dom";
 import Client from './pages/Client';
 import Admin from './pages/Admin';
-import Register from './pages/register';
-import RoomHistory from './pages/RoomHistory'
+import Register from './pages/Register';
 
 export default function App() {
   return (

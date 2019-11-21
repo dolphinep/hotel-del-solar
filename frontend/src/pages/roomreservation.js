@@ -102,7 +102,7 @@ class Roomreservation extends Component {
     getReservationpayed =  (cusid) => {
        fetch(`http://localhost:4000/roomreservationpayed?cusid=${cusid}`)
       .then(window.location.reload())
-\     
+     
   }
     //onclick={this.getReservationdelete(CUSTOMER_ID).bind(this)}
   
