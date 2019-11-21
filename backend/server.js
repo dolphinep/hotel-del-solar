@@ -74,6 +74,22 @@ app.get('/customerid', (req, res) => {
     })
 })
 
+//Add by nai
+app.get('/reserveid', (req, res) => {
+    const get = `SELECT RESERVED_ID FROM roomreserved 
+    where RESERVED_ID=(select max(RESERVED_ID) from roomreserved)`;
+    connection.query(get, (err, results) => {
+        if (err) {
+            return res.send(err)
+        }
+        else {
+            return res.json({
+                data: results
+            })
+        }
+    })
+})
+
 app.get('/', (req, res) => {
     res.send('go to /add')
 });
