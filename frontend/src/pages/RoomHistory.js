@@ -39,8 +39,8 @@ class RoomHistory extends Component{
         },
       }));
 
-      createData(ROOM_ID,Date,CUSTOMER_ID) {
-        return {ROOM_ID,Date,CUSTOMER_ID};
+      createData(ROOM_ID,DATE,CUSTOMER_ID) {
+        return {ROOM_ID,DATE,CUSTOMER_ID};
       }
 
       rows = [
@@ -86,7 +86,7 @@ class RoomHistory extends Component{
             <TableRow >
               
               <TableCell align="left">{row.ROOM_ID}</TableCell>
-              <TableCell align="left">{row.Date}</TableCell>
+              <TableCell align="left">{row.DATE}</TableCell>
               <TableCell align="left">{row.CUSTOMER_ID}</TableCell>
             </TableRow>
           ))}
