@@ -9,8 +9,8 @@ const bodyParser = require('body-parser')
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: config.passwordDB, //////////////FILLHERE
-    database: config.nameDB, //////////////FILLHERE
+    password: 'minus51973', //////////////FILLHERE
+    database: 'hoteldelsolar', //////////////FILLHERE
 });
 
 
@@ -291,9 +291,46 @@ app.get('/roomreservationpayed', (req, res)=>{
     
 })
 
+
+app.get('/lastpayment', (req, res)=>{
+    const SELECTROOMRESERVATION = `CALL lastpaymentid2()`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+                
+            })
+        }
+    })
+    
+})
+
 app.get('/createpayment', (req, res)=>{
-    const {cusid} = req.query;
-    const SELECTROOMRESERVATION = `INSERT INTO payment WHERE CUSTOMER_ID='${cusid}'`;
+    const {payid,resid,cusid,price} = req.query;
+    const SELECTROOMRESERVATION = `INSERT INTO payment (PAYMENT_ID,CUSTOMER_ID,RESERVE_ID,TOTAL_PRICE) VALUES(${payid},${resid},${cusid},${price})`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    })
+    
+})
+
+app.get('/roomtypeprice', (req, res)=>{
+    const {type} = req.query;
+    const SELECTROOMRESERVATION = `CALL roomtypeprice('${type}')`;
 
     connection.query(SELECTROOMRESERVATION, (err,results)=>{
         if(err){
@@ -323,7 +360,6 @@ app.get('/upavailableroom',(req, res)=> {
         }
     })
 })
-const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE STATUS="payed"`;
 
 app.get('/history', (req, res) => {
     const SELECTHISTORY = `SELECT * FROM ROOM_HISTORY`;

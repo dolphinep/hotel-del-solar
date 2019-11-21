@@ -73,7 +73,9 @@ class Admin extends React.Component {
                         </Container>
                     </Route>
                     <Route path={`${path}/history`}>
-                        <RoomHistory/>
+
+                        
+                        <Container><RoomHistory/></Container>
                     </Route>
                 </Switch>
 

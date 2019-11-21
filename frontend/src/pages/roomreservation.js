@@ -44,8 +44,8 @@ class Roomreservation extends Component {
       }));
 
 
-    createData(RESERVED_ID,CHECKIN_DATE,CHECKOUT_DATE,CUSTOMER_ID,STAY_NIGHT) {
-        return {RESERVED_ID,CHECKIN_DATE,CHECKOUT_DATE,CUSTOMER_ID,STAY_NIGHT };
+    createData(RESERVED_ID,CHECKIN_DATE,CHECKOUT_DATE,CUSTOMER_ID,STAY_NIGHT,ROOMTYPE,AMOUNT) {
+        return {RESERVED_ID,CHECKIN_DATE,CHECKOUT_DATE,CUSTOMER_ID,STAY_NIGHT,ROOMTYPE,AMOUNT };
       }
       
     rows = [
@@ -77,11 +77,33 @@ class Roomreservation extends Component {
             
          
     }
-    getReservationpayed = (cusid) => {
+    
 
-        fetch(`http://localhost:4000/roomreservationpayed?cusid=${cusid}`)
-        .then(window.location.reload())
+    getlastpayid =  (cusid,resid,type,amount) => {
+         fetch('http://localhost:4000/lastpayment')
+            .then(response => response.json())
+            //.then(response => console.log(response.data[0][0].PAYMENT_ID+1))
+            .then(response => (  this.gettypeprice(response.data[0][0].PAYMENT_ID+1,cusid,resid,type,amount)))
     }
+
+    gettypeprice =  (payid,cusid,resid,type,amount) => {
+       fetch(`http://localhost:4000/roomtypeprice?type=${type}`)
+        .then(response => response.json())
+        // .then(response => console.log(response.data[0][0].PRICE)*amount)
+        .then(response => (  this.getReservationcreatepayment(payid,cusid,resid,response.data[0][0].PRICE*amount)))
+    }
+
+    getReservationcreatepayment =  (payid,cusid,resid,price) => {
+
+       fetch(`http://localhost:4000/createpayment?payid=${payid}&cusid=${cusid}&resid=${resid}&price=${price}`)
+        .then(this.getReservationpayed((cusid)))
+      
+    }
+    getReservationpayed =  (cusid) => {
+       fetch(`http://localhost:4000/roomreservationpayed?cusid=${cusid}`)
+      .then(window.location.reload())
+     
+  }
     //onclick={this.getReservationdelete(CUSTOMER_ID).bind(this)}
   
 
@@ -90,8 +112,7 @@ class Roomreservation extends Component {
         const classes = this.useStyles;
         const classes2 = this.useStyles2;
         this.rows =  reservation ;
-        console.log(reservation)
-        console.log(this.rows)
+        
 
         return (
             //{reservation.map(this.renderReservation)}
@@ -110,6 +131,8 @@ class Roomreservation extends Component {
             <TableCell>Check-out</TableCell>
             <TableCell>CustomerID</TableCell>
             <TableCell>Night</TableCell>
+            <TableCell>Room's Type</TableCell>
+            <TableCell>Amount</TableCell>
             
           </TableRow>
         </TableHead>
@@ -122,8 +145,11 @@ class Roomreservation extends Component {
               <TableCell align="left">{row.CHECKOUT_DATE}</TableCell>
               <TableCell align="left">{row.CUSTOMER_ID}</TableCell>
               <TableCell align="left">{row.STAY_NIGHT}</TableCell>
-              <Button align="center" variant="contained" color="primary" onClick={() => this.getReservationpayed(row.CUSTOMER_ID)}>Billing</Button>
+              <TableCell align="left">{row.ROOMTYPE}</TableCell>
+              <TableCell align="left">{row.AMOUNT}</TableCell>
+              <Button align="center" variant="contained" color="primary" onClick={() => this.getlastpayid(row.CUSTOMER_ID,row.RESERVED_ID,row.ROOMTYPE,row.AMOUNT)}>Billing</Button>
               <Button align="center" variant="contained" color="secondary" onClick={() => this.getReservationdelete(row.CUSTOMER_ID)} > Cancel</Button>
+            
             </TableRow>
           ))}
         </TableBody>
