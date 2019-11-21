@@ -10,16 +10,8 @@ console.log(config);
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-<<<<<<< HEAD
-    password: 'Muknairun2', //////////////FILLHERE
-    database: 'hotel_del_solar', //////////////FILLHERE
-||||||| merged common ancestors
-    password: 'Gamerpg46842', //////////////FILLHERE
-    database: 'hotel', //////////////FILLHERE
-=======
-    password: '1480', //////////////FILLHERE
-    database: 'hotel_del_solar', //////////////FILLHERE
->>>>>>> 03461ed8e8a3f98cd3d00fcb894473c242fb1540
+    password: config.passwordDB, //////////////FILLHERE
+    database: config.nameDB, //////////////FILLHERE
 });
 
 
@@ -67,6 +59,21 @@ app.get('/availableroomcalendar', (req, res) => {
     })
 })
 
+//Add by nai
+app.get('/customerid', (req, res) => {
+    const get = `SELECT CUSTOMER_ID FROM customer 
+    where CUSTOMER_ID=(select max(CUSTOMER_ID) from customer)`;
+    connection.query(get, (err, results) => {
+        if (err) {
+            return res.send(err)
+        }
+        else {
+            return res.json({
+                data: results
+            })
+        }
+    })
+})
 
 app.get('/', (req, res) => {
     res.send('go to /add')
@@ -93,7 +100,7 @@ app.post('/addcustomer2', (req, res) => {
     const { citizenID, fname, lname, gender, bdate, email, tel } = req.body;
     const Add = `INSERT INTO customer2(CITIZEN_ID, FNAME, LNAME, GENDER, BDATE, EMAIL, TEL) 
     VALUES(${citizenID}, '${fname}', '${lname}', '${gender}', '${bdate}', '${email}', '${tel}')`;
-
+    
     connection.query(Add, (err, results) => {
         if (err) {
             return res.status("Error", err);
@@ -133,7 +140,7 @@ app.get('/customer2', (req, res) => {
 app.post('/addcustomer',(req,res)=>{
     const {citizenID,customer_id}=req.body;
     const toAdd=`INSERT INTO customer(CITIZEN_ID,CUSTOMER_ID)
-    VALUES('${citizenID}',${customer_id})`;
+    VALUES('${citizenID}','${customer_id}')`;
 
     connection.query(toAdd, (err,results) => {
         if (err) {
@@ -148,9 +155,11 @@ app.post('/addcustomer',(req,res)=>{
 
 //Nai add room_reserved
 app.post('/roomreserved',(req,res)=>{
-    const {reserved_id,checkin_date,checkout_date,customer_id,stay_night}=req.bofy;
-    const toAdd=`INSERT INTO room(RESERVED_ID, CHECKIN_DATE, CHECKOUT_DATE, CUSTOMER_ID,STAY_NIGHT) 
-    VALUES(${reserved_id}, '${checkin_date}', '${checkout_date}', ${customer_id},${stay_night})`;
+    
+    const {reserved_id,checkin_date,checkout_date,customer_id,stay_night,reserve_status}=req.body;
+    const toAdd=`INSERT INTO roomreserved(RESERVED_ID, CHECKIN_DATE, CHECKOUT_DATE, CUSTOMER_ID,STAY_NIGHT,RESERVE_STATUS) 
+    VALUES(${reserved_id}, '${checkin_date}', '${checkout_date}', ${customer_id},${stay_night},'${reserve_status}')`;
+   
     connection.query(toAdd, (err,results) => {
         if (err) {
             return res.status("Error", err);
@@ -159,6 +168,16 @@ app.post('/roomreserved',(req,res)=>{
             console.log(results)
             res.json(results);
         }
+    })
+})
+
+//Nai add get customer
+app.get('/customer', (req, res) => {
+    const cus = `SELECT * FROM customer`
+
+    connection.query(cus, (err, results) => {
+        if (err) throw error;
+        res.end(JSON.stringify(results));
     })
 })
 

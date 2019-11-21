@@ -10,14 +10,7 @@ import {
 } from "react-router-dom";
 import Client from './pages/Client';
 import Admin from './pages/Admin';
-<<<<<<< HEAD
 import Register from './pages/Register';
-||||||| merged common ancestors
-import Register from './pages/register';
-=======
-import Register from './pages/register';
-import RoomHistory from './pages/RoomHistory'
->>>>>>> 03461ed8e8a3f98cd3d00fcb894473c242fb1540
 
 export default function App() {
   return (
