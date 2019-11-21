@@ -158,7 +158,7 @@ class Register extends Component {
       body: JSON.stringify(data3)
 
     }).then(response => response.json)
-      .catch(err => console.error(err))
+      .catch(err => console.error(err),window.location.href = '/')
 
     let data = {
       citizenID: this.state.citizen_id,
@@ -187,7 +187,8 @@ class Register extends Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data2)
     
-    }).then(response => response.json)
+    }).then(response => response.json)      
+      //.then(window.location.href = '/')
       .then(alert("success"))
       .catch(err => console.error(err))
 
