@@ -143,6 +143,18 @@ class Register extends Component {
     .catch(err=>console.error(err),this.setState({reserved_id: 1}))
 
     //console.log(this.state)
+    let data4 = {
+      reserved_id:this.state.reserved_id,
+      typeid:this.state.typeid,
+      amount:this.state.amount
+    }
+    await fetch('http://localhost:4000/reserved', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data4)
+
+    }).then(response => response.json)
+      .catch(err => console.error(err),window.location.href = '/')
 
     let data3 = {
       reserved_id:this.state.reserved_id,

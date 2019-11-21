@@ -280,11 +280,6 @@ class Client extends Component {
                             <MenuItem value={10}>10</MenuItem>
                         </Select>
                     </FormControl><br></br>  <br></br>
-                    <Link to='/register'>
-                        <ColorButton variant="contained" style={{ backgroundColor: '#4BA7E3', color: '#ffffff' }}>
-                            Next
-                    </ColorButton >
-                    </Link>
                     <ColorButton variant="contained" style={{ backgroundColor: '#4BA7E3', color: '#ffffff' }}
                         onClick={this.nextPage}>
                         Next
