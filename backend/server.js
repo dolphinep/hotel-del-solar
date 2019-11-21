@@ -10,8 +10,8 @@ console.log(config);
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '1480', //////////////FILLHERE
-    database: 'hotel_del_solar', //////////////FILLHERE
+    password: 'minus51973', //////////////FILLHERE
+    database: 'hoteldelsolar', //////////////FILLHERE
 });
 
 
@@ -219,7 +219,7 @@ app.get('/roomreservationdelete', (req, res)=>{
 
 app.get('/roomreservationpayed', (req, res)=>{
     const {cusid} = req.query;
-    const SELECTROOMRESERVATION = `UPDATE roomreserved SET STATUS = 'payed' WHERE CUSTOMER_ID='${cusid}'`;
+    const SELECTROOMRESERVATION = `UPDATE roomreserved SET RESERVE_STATUS = 'payed' WHERE CUSTOMER_ID='${cusid}'`;
 
     connection.query(SELECTROOMRESERVATION, (err,results)=>{
         if(err){
@@ -235,9 +235,46 @@ app.get('/roomreservationpayed', (req, res)=>{
     
 })
 
+
+app.get('/lastpayment', (req, res)=>{
+    const SELECTROOMRESERVATION = `CALL lastpaymentid2()`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+                
+            })
+        }
+    })
+    
+})
+
 app.get('/createpayment', (req, res)=>{
-    const {cusid} = req.query;
-    const SELECTROOMRESERVATION = `INSERT INTO payment WHERE CUSTOMER_ID='${cusid}'`;
+    const {payid,resid,cusid,price} = req.query;
+    const SELECTROOMRESERVATION = `INSERT INTO payment (PAYMENT_ID,CUSTOMER_ID,RESERVE_ID,TOTAL_PRICE) VALUES(${payid},${resid},${cusid},${price})`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
+    })
+    
+})
+
+app.get('/roomtypeprice', (req, res)=>{
+    const {type} = req.query;
+    const SELECTROOMRESERVATION = `CALL roomtypeprice('${type}')`;
 
     connection.query(SELECTROOMRESERVATION, (err,results)=>{
         if(err){
