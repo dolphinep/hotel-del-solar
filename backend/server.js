@@ -300,12 +300,19 @@ app.get('/upavailableroom',(req, res)=> {
 const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE STATUS="payed"`;
 
 app.get('/history', (req, res) => {
-    const SELECTHISTORY = `SELECT * FROM roomreserved WHERE RESERVE_STATUS="payed"`;
+    const SELECTHISTORY = `SELECT * FROM ROOM_HISTORY`;
 
 
     connection.query(SELECTHISTORY, (err, results) => {
-        if (err) throw error;
-        res.json({data: results});
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+            })
+        }
     })
 })
 
