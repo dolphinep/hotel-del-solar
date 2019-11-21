@@ -344,7 +344,6 @@ app.get('/upavailableroom',(req, res)=> {
         }
     })
 })
-const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE STATUS="payed"`;
 
 app.get('/history', (req, res) => {
     const SELECTHISTORY = `SELECT * FROM ROOM_HISTORY`;
