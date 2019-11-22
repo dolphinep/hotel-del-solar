@@ -24,21 +24,27 @@ class Register extends Component {
       email: '',
       tel: '',
       typeid: null,
-      selectedCheckInDate: null,
-      selectedCheckOutDate: null,
+      selectedCheckInDate: 'null',
+      selectedCheckOutDate: 'null',
       amount: 0,
-      customer_id: ''
+      customer_id: '',
+      reserved_id:0,
+      stay_night: 0,
+      reserve_status:'Wait'
     }
   }
 
   componentDidMount() {
 
-    this.state.selectedCheckInDate = this.getUrlVars()["checkin"];
-    this.state.selectedCheckOutDate = this.getUrlVars()["checkout"];
-    this.state.typeid = this.getUrlVars()["typeid"];
-    this.state.amount = this.getUrlVars()["amount"];
-    console.log(this.state);
-    console.log("HI");
+    this.setState({selectedCheckInDate:  this.getUrlVars()["checkin"]});
+    this.setState({selectedCheckOutDate: this.getUrlVars()["checkout"]});
+    //this.state.selectedCheckOutDate = this.getUrlVars()["checkout"];
+    this.setState({typeid: this.getUrlVars()["typeid"]}) ;
+    this.setState({amount: this.getUrlVars()["amount"]}) ;
+    //console.log(this.state);
+    //console.log("HI");
+    this.setState({stay_night:parseInt(this.getUrlVars()["checkout"].slice(-2))
+    -parseInt(this.getUrlVars()['checkin'].slice(-2))})
   }
 
   getUrlVars() {
@@ -122,9 +128,50 @@ class Register extends Component {
       })
       .catch(err=>console.error(err),this.setState({customer_id: '1'}))
       //console.log(this.state.customer_id)
-  
+    
+    await fetch(`http://localhost:4000/reserveid`)
+    .then(response=>response.json())
+    .then(function(jsonData){
+      return JSON.stringify(jsonData);
+    })
+    .then(function(jsonStr){
+      var t=JSON.parse(jsonStr);
+      var min=parseInt(t.data[0].RESERVED_ID)+1
+      const min2 = min.toString();
+      that.setState({reserved_id: min2});
+    })
+    .catch(err=>console.error(err),this.setState({reserved_id: 1}))
 
-    console.log(this.state)
+    //console.log(this.state)
+    let data4 = {
+      reserved_id:this.state.reserved_id,
+      typeid:this.state.typeid,
+      amount:this.state.amount
+    }
+    await fetch('http://localhost:4000/reserved', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data4)
+
+    }).then(response => response.json)
+      .catch(err => console.error(err),window.location.href = '/')
+
+    let data3 = {
+      reserved_id:this.state.reserved_id,
+      checkin_date:this.state.selectedCheckInDate,
+      checkout_date:this.state.selectedCheckOutDate,
+      customer_id:this.state.customer_id,
+      stay_night:this.state.stay_night,
+      reserve_status:this.state.reserve_status
+    }
+    await fetch('http://localhost:4000/roomreserved', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data3)
+
+    }).then(response => response.json)
+      .catch(err => console.error(err),window.location.href = '/')
+
     let data = {
       citizenID: this.state.citizen_id,
       fname: this.state.fname,
@@ -152,14 +199,16 @@ class Register extends Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data2)
     
-    }).then(response => response.json)
+    }).then(response => response.json)      
+      //.then(window.location.href = '/')
       .then(alert("success"))
       .catch(err => console.error(err))
 
   }
 
   render() {
-    //console.log("customer id",this.state.customer_id)
+    console.log("state",this.state)
+    //console.log('test',this.state.stay_night)
     return (
       <Container component="main" maxWidth="xs">
 

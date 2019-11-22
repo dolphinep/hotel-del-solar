@@ -9,8 +9,8 @@ const bodyParser = require('body-parser')
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'minus51973', //////////////FILLHERE
-    database: 'hoteldelsolar', //////////////FILLHERE
+    password: config.passwordDB, //////////////FILLHERE
+    database: config.nameDB, //////////////FILLHERE
 });
 
 
@@ -62,6 +62,22 @@ app.get('/availableroomcalendar', (req, res) => {
 app.get('/customerid', (req, res) => {
     const get = `SELECT CUSTOMER_ID FROM customer 
     where CUSTOMER_ID=(select max(CUSTOMER_ID) from customer)`;
+    connection.query(get, (err, results) => {
+        if (err) {
+            return res.send(err)
+        }
+        else {
+            return res.json({
+                data: results
+            })
+        }
+    })
+})
+
+//Add by nai
+app.get('/reserveid', (req, res) => {
+    const get = `SELECT RESERVED_ID FROM roomreserved 
+    where RESERVED_ID=(select max(RESERVED_ID) from roomreserved)`;
     connection.query(get, (err, results) => {
         if (err) {
             return res.send(err)
@@ -158,6 +174,24 @@ app.post('/roomreserved',(req,res)=>{
     const {reserved_id,checkin_date,checkout_date,customer_id,stay_night,reserve_status}=req.body;
     const toAdd=`INSERT INTO roomreserved(RESERVED_ID, CHECKIN_DATE, CHECKOUT_DATE, CUSTOMER_ID,STAY_NIGHT,RESERVE_STATUS) 
     VALUES(${reserved_id}, '${checkin_date}', '${checkout_date}', ${customer_id},${stay_night},'${reserve_status}')`;
+   
+    connection.query(toAdd, (err,results) => {
+        if (err) {
+            return res.status("Error", err);
+        }
+        else {
+            console.log(results)
+            res.json(results);
+        }
+    })
+})
+
+//Add by Nai
+app.post('/reserved',(req,res)=>{
+    
+    const {reserved_id,typeid,amount}=req.body;
+    const toAdd=`INSERT INTO reserved(RESERVED_ID, TYPE_ID,AMOUNT) 
+    VALUES(${reserved_id}, '${typeid}', ${amount})`;
    
     connection.query(toAdd, (err,results) => {
         if (err) {
@@ -383,7 +417,6 @@ app.get('/upavailableroom',(req, res)=> {
         }
     })
 })
-const SELECTROOMRESERVATION = `SELECT * FROM roomreserved WHERE STATUS="payed"`;
 
 app.get('/history', (req, res) => {
     const SELECTHISTORY = `SELECT * FROM ROOM_HISTORY`;
