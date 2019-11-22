@@ -44,7 +44,15 @@ class Admin extends React.Component {
                 {
                     this.state.pass ? <Redirect to="/admin/add" /> : <Redirect to="/admin" />
                 } */}
-                <Grid container justify="center" alignItems="center">
+                
+
+                <Switch>
+                    <Route exact path={path}>
+                        <Login parentLogin={this.isLogin} />
+                    </Route>
+                    <Route path={`${path}/add`}>
+                        <Container>
+                        <Grid container justify="center" alignItems="center">
                     <Breadcrumbs aria-label="breadcrumb">
                         <Link to={`${url}/add`} color="inherit">
                             Room Reserve
@@ -57,23 +65,41 @@ class Admin extends React.Component {
                         </Link>
                     </Breadcrumbs>
                 </Grid>
-
-                <Switch>
-                    <Route exact path={path}>
-                        <Login parentLogin={this.isLogin} />
-                    </Route>
-                    <Route path={`${path}/add`}>
-                        <Container>
                             <Roomreservation />
                         </Container>
                     </Route>
                     <Route path={`${path}/assign`}>
                         <Container>
+                        <Grid container justify="center" alignItems="center">
+                    <Breadcrumbs aria-label="breadcrumb">
+                        <Link to={`${url}/add`} color="inherit">
+                            Room Reserve
+                        </Link>
+                        <Link to={`${url}/assign`} color="inherit" >
+                            Assign Room
+                        </Link>
+                        <Link to={`${url}/history`} color="inherit" >
+                            Room History
+                        </Link>
+                    </Breadcrumbs>
+                </Grid>
                             <Table />
                         </Container>
                     </Route>
                     <Route path={`${path}/history`}>
-
+                    <Grid container justify="center" alignItems="center">
+                    <Breadcrumbs aria-label="breadcrumb">
+                        <Link to={`${url}/add`} color="inherit">
+                            Room Reserve
+                        </Link>
+                        <Link to={`${url}/assign`} color="inherit" >
+                            Assign Room
+                        </Link>
+                        <Link to={`${url}/history`} color="inherit" >
+                            Room History
+                        </Link>
+                    </Breadcrumbs>
+                </Grid>
                         
                         <Container><RoomHistory/></Container>
                     </Route>

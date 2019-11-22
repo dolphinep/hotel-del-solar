@@ -294,9 +294,48 @@ app.get('/lastpayment', (req, res)=>{
     
 })
 
+
+app.get('/residtypeprice', (req, res)=>{
+    const {resid} = req.query;
+    const SELECTROOMRESERVATION = `CALL residtypeamount(${resid})`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+                
+            })
+        }
+    })
+    
+})
+
+
+app.get('/typeidprice', (req, res)=>{
+    const {typeid} = req.query;
+    const SELECTROOMRESERVATION = `CALL roomidprice('${typeid}')`;
+
+    connection.query(SELECTROOMRESERVATION, (err,results)=>{
+        if(err){
+            
+            return res.send(err);
+        }
+        else{
+            return res.json({
+                data: results
+                
+            })
+        }
+    })
+    
+})
 app.get('/createpayment', (req, res)=>{
-    const {payid,resid,cusid,price} = req.query;
-    const SELECTROOMRESERVATION = `INSERT INTO payment (PAYMENT_ID,CUSTOMER_ID,RESERVE_ID,TOTAL_PRICE) VALUES(${payid},${resid},${cusid},${price})`;
+    const {payid,cusid,resid,price} = req.query;
+    const SELECTROOMRESERVATION = `INSERT INTO payment (PAYMENT_ID,CUSTOMER_ID,RESERVE_ID,TOTAL_PRICE) VALUES(${payid},${cusid},${resid},${price})`;
 
     connection.query(SELECTROOMRESERVATION, (err,results)=>{
         if(err){
@@ -312,23 +351,23 @@ app.get('/createpayment', (req, res)=>{
     
 })
 
-app.get('/roomtypeprice', (req, res)=>{
-    const {type} = req.query;
-    const SELECTROOMRESERVATION = `CALL roomtypeprice('${type}')`;
+// app.get('/roomtypeprice', (req, res)=>{
+//     const {type} = req.query;
+//     const SELECTROOMRESERVATION = `CALL roomtypeprice('${type}')`;
 
-    connection.query(SELECTROOMRESERVATION, (err,results)=>{
-        if(err){
+//     connection.query(SELECTROOMRESERVATION, (err,results)=>{
+//         if(err){
             
-            return res.send(err);
-        }
-        else{
-            return res.json({
-                data: results
-            })
-        }
-    })
+//             return res.send(err);
+//         }
+//         else{
+//             return res.json({
+//                 data: results
+//             })
+//         }
+//     })
     
-})
+// })
 
 app.get('/upavailableroom',(req, res)=> {
     const {typeid, checkin, checkout, amount} = req.query;

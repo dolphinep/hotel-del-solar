@@ -79,26 +79,31 @@ class Roomreservation extends Component {
     }
     
 
-    getlastpayid =  (cusid,resid,type,amount) => {
+    getlastpayid =  (cusid,resid) => {
          fetch('http://localhost:4000/lastpayment')
             .then(response => response.json())
             //.then(response => console.log(response.data[0][0].PAYMENT_ID+1))
-            .then(response => (  this.gettypeprice(response.data[0][0].PAYMENT_ID+1,cusid,resid,type,amount)))
+            .then(response => (  this.getresidtypeamount(response.data[0][0].PAYMENT_ID+1,cusid,resid)))
     }
 
-    gettypeprice =  (payid,cusid,resid,type,amount) => {
-       fetch(`http://localhost:4000/roomtypeprice?type=${type}`)
-        .then(response => response.json())
-        // .then(response => console.log(response.data[0][0].PRICE)*amount)
-        .then(response => (  this.getReservationcreatepayment(payid,cusid,resid,response.data[0][0].PRICE*amount)))
+    getresidtypeamount = (payid,cusid,resid) => {
+          fetch(`http://localhost:4000/residtypeprice?resid=${resid}`)
+          .then(response => response.json())
+          .then(response => (  this.gettypeidprice(payid,cusid,resid,response.data[0][0].TYPE_ID,response.data[0][0].AMOUNT)))
     }
 
-    getReservationcreatepayment =  (payid,cusid,resid,price) => {
-
-       fetch(`http://localhost:4000/createpayment?payid=${payid}&cusid=${cusid}&resid=${resid}&price=${price}`)
-        .then(this.getReservationpayed((cusid)))
-      
+    gettypeidprice = (payid,cusid,resid,typeid,amount) => {
+          fetch(`http://localhost:4000/typeidprice?typeid=${typeid}`)
+          .then(response => response.json())
+          .then(response => (  this.getcreatepayment(payid,cusid,resid,response.data[0][0].PRICE*amount)))
     }
+
+    getcreatepayment = (payid,cusid,resid,price) => {
+      fetch(`http://localhost:4000/createpayment?payid=${payid}&cusid=${cusid}&resid=${resid}&price=${price}`)
+      .then(response => response.json())
+      .then(this.getReservationpayed(cusid))
+    }
+
     getReservationpayed =  (cusid) => {
        fetch(`http://localhost:4000/roomreservationpayed?cusid=${cusid}`)
       .then(window.location.reload())
@@ -131,8 +136,7 @@ class Roomreservation extends Component {
             <TableCell>Check-out</TableCell>
             <TableCell>CustomerID</TableCell>
             <TableCell>Night</TableCell>
-            <TableCell>Room's Type</TableCell>
-            <TableCell>Amount</TableCell>
+        
             
           </TableRow>
         </TableHead>
@@ -145,9 +149,8 @@ class Roomreservation extends Component {
               <TableCell align="left">{row.CHECKOUT_DATE}</TableCell>
               <TableCell align="left">{row.CUSTOMER_ID}</TableCell>
               <TableCell align="left">{row.STAY_NIGHT}</TableCell>
-              <TableCell align="left">{row.ROOMTYPE}</TableCell>
-              <TableCell align="left">{row.AMOUNT}</TableCell>
-              <Button align="center" variant="contained" color="primary" onClick={() => this.getlastpayid(row.CUSTOMER_ID,row.RESERVED_ID,row.ROOMTYPE,row.AMOUNT)}>Billing</Button>
+     
+              <Button align="center" variant="contained" color="primary" onClick={() => this.getlastpayid(row.CUSTOMER_ID,row.RESERVED_ID)}>Billing</Button>
               <Button align="center" variant="contained" color="secondary" onClick={() => this.getReservationdelete(row.CUSTOMER_ID)} > Cancel</Button>
             
             </TableRow>
