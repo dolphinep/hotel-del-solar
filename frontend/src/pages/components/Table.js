@@ -77,11 +77,16 @@ class Table extends Component {
   // to overwrite existing data base information
   updateDB = (data) => {
     try {
-
+      fetch('http://localhost:4000/payedroom', {
+        method: 'put',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
     } catch (error) {
       console.log(error)
     }
   };
+
   render() {
     return (
       <div style={{ maxWidth: "100%" }}>
