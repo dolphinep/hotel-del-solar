@@ -75,12 +75,26 @@ class Table extends Component {
 
   // our update method that uses our backend api
   // to overwrite existing data base information
-  updateDB = (data) => {
+  updateDB = async (data) => {
     try {
-      fetch('http://localhost:4000/payedroom', {
+      await fetch('http://localhost:4000/payedroom', {
         method: 'put',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
+      })
+
+      const aa = await fetch('http://localhost:4000/roomhistoryid')
+        .then(response => response.json())
+      
+      var data2 = data;
+      data2.ROOM_ID = (parseInt(aa.data[0].ROOM_ID)+1).toString();
+      console.log("aaa",aa)
+      console.log("data2",data2)
+
+      await fetch('http://localhost:4000/roomhistory', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data2)
       })
     } catch (error) {
       console.log(error)

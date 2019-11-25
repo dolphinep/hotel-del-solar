@@ -435,12 +435,26 @@ app.get('/history', (req, res) => {
     })
 })
 
+app.get('/roomhistoryid', (req, res) => {
+    const get = `SELECT ROOM_ID FROM room_history 
+    where ROOM_ID=(select max(ROOM_ID) from room_history)`;
+    connection.query(get, (err, results) => {
+        if (err) {
+            return res.send(err)
+        }
+        else {
+            return res.json({
+                data: results
+            })
+        }
+    })
+})
+
 app.put('/payedroom', (req, res) => {
     const { RESERVED_ID, CHECKIN_DATE, CHECKOUT_DATE, CUSTOMER_ID, RESERVE_STATUS } = req.body;
-    const UPDATE_RESERVE_IN_DAY = `UPDATE roomreserved SET RESERVED_ID = ${parseInt(RESERVED_ID)}, CHECKIN_DATE = '${CHECKIN_DATE.substring(0,10)}', 
-    CHECKOUT_DATE = '${CHECKOUT_DATE.substring(0,10)}', CUSTOMER_ID = ${parseInt(CUSTOMER_ID)}, RESERVE_STATUS = '${RESERVE_STATUS}' 
+    const UPDATE_RESERVE_IN_DAY = `UPDATE roomreserved SET RESERVED_ID = ${parseInt(RESERVED_ID)}, CHECKIN_DATE = '${CHECKIN_DATE.substring(0, 10)}', 
+    CHECKOUT_DATE = '${CHECKOUT_DATE.substring(0, 10)}', CUSTOMER_ID = ${parseInt(CUSTOMER_ID)}, RESERVE_STATUS = '${RESERVE_STATUS}' 
     WHERE RESERVED_ID = ${parseInt(RESERVED_ID)}`;
-    console.log(UPDATE_RESERVE_IN_DAY)
     connection.query(UPDATE_RESERVE_IN_DAY, (err, results) => {
         if (err) {
             return res.send(err)
@@ -449,6 +463,22 @@ app.put('/payedroom', (req, res) => {
             return res.json({
                 data: results
             })
+        }
+    })
+})
+
+app.post('/roomhistory', (req, res) => {
+    const { ROOM_ID, CHECKIN_DATE, CUSTOMER_ID } = req.body;
+    const POST_HISTORY = `INSERT INTO room_history( ROOM_ID, DATE, CUSTOMER_ID ) 
+    VALUES('${ROOM_ID}', '${CHECKIN_DATE.substring(0,10)}', '${CUSTOMER_ID}')`;
+    console.log("post",POST_HISTORY)
+    connection.query(POST_HISTORY, (err, results) => {
+        if (err) {
+            return res.status("Error", err);
+        }
+        else {
+            console.log(results)
+            res.json(results);
         }
     })
 })
