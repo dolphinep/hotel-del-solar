@@ -24,4 +24,3 @@ Material UI = ตกแต่งหน้าเวป เลือกใช้ c
 > https://material-ui.com/
 
 **Please Check your MySQL Password Before nodemon index.js**
-kuy drive
